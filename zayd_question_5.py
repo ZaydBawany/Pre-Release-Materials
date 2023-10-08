@@ -255,6 +255,5 @@ if __name__ == "__main__":
         print("- T Pattern: \n TTT \n  T \n  T ")
         print("- X Pattern: \nX   X\n  X \nX   X")
         print("- You have 38 moves to achieve the highest score possible by forming patterns.\n")
-    
+    )
     #changes end
-)

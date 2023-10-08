@@ -245,10 +245,14 @@ if __name__ == "__main__":
     Main(
         #changes start
         
-        # The following lines count the number of blocked cells on the grid and display the count to the user.
-        # We iterate over each cell in the grid and check if it's an instance of the BlockedCell class.
-        blocked_cells_count = sum([1 for row in self.__Grid for cell in row if isinstance(cell, BlockedCell)])
-        print(f"There are {blocked_cells_count} blocked cells in this puzzle.")
+        # The following lines count the number of each symbol (Q, T, X) placed on the grid.
+        # Iterate over each cell in the grid and check its symbol value.
+        q_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "Q"])
+        t_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "T"])
+        x_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "X"])
+        
+        # Then, display the count of each symbol to the user.
+        print(f"Symbols placed: Q = {q_count}, T = {t_count}, X = {x_count}")
         
         #changes end
 )
