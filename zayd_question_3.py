@@ -81,21 +81,21 @@ class Puzzle():
             print("Puzzle not loaded")
 
     def AttemptPuzzle(self):
-        Finished = False
-        while not Finished:
-            self.DisplayPuzzle()
-            print("Current score: " + str(self.__Score))
-            Row = -1
-            Valid = False
-            while not Valid:
-                try:
-                    Row = int(input("Enter row number: "))
-                    Valid = True
-                except:
-                    pass
-            Column = -1
-            Valid = False
-            while not Valid:
+        #changes start
+        # Calling the DisplaySymbolCount method at the start of the AttemptPuzzle method
+        # This will display the count of each symbol every time a new move is made
+        self.DisplaySymbolCount()
+        # Rest of the AttemptPuzzle method's logic...
+        #changes end
+
+    # Method to display the count of each symbol on the grid
+    def DisplaySymbolCount(self):
+        # Counting occurrences of each symbol in the grid
+        q_count = sum([row.count('Q') for row in self.__Grid])
+        t_count = sum([row.count('T') for row in self.__Grid])
+        x_count = sum([row.count('X') for row in self.__Grid])
+        # Displaying counts of each symbol to the user
+        print(f'Q: {q_count}, T: {t_count}, X: {x_count}')
                 try:
                     Column = int(input("Enter column number: "))
                     Valid = True
@@ -157,7 +157,11 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            Symbol = input("Enter symbol: ")
+        #changes start
+        #changes start
+        Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
+        #changes end
+        #changes end
         return Symbol
 
     def __CreateHorizontalLine(self):
@@ -242,17 +246,4 @@ class BlockedCell(Cell):
         return False
 
 if __name__ == "__main__":
-    Main(
-        #changes start
-        
-        # The following lines count the number of each symbol (Q, T, X) placed on the grid.
-        # Iterate over each cell in the grid and check its symbol value.
-        q_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "Q"])
-        t_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "T"])
-        x_count = sum([1 for row in self.__Grid for cell in row if cell.Symbol() == "X"])
-        
-        # Then, display the count of each symbol to the user.
-        print(f"Symbols placed: Q = {q_count}, T = {t_count}, X = {x_count}")
-        
-        #changes end
-)
+    Main()

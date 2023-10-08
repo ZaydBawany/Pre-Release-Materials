@@ -17,6 +17,9 @@ def Main():
             MyPuzzle = Puzzle(8, int(8 * 8 * 0.6))
         Score = MyPuzzle.AttemptPuzzle()
         print("Puzzle finished. Your score was: " + str(Score))
+        replay = input("Do you want to replay your moves? (y/n): ").lower()
+        if replay == "y":
+            MyPuzzle.ReplayMoves() #change 3
         Again = input("Do another puzzle? ").lower()
 
 class Puzzle():
@@ -51,6 +54,7 @@ class Puzzle():
             TPattern = Pattern("T", "TTT**T**T")
             self.__AllowedPatterns.append(TPattern)
             self.__AllowedSymbols.append("T")
+            self.__Moves = [] #change 1
 
     def __LoadPuzzle(self, Filename):
         try:
@@ -157,9 +161,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            #changes start
-            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-            #changes end
+            Symbol = input("Enter symbol: ")
         return Symbol
 
     def __CreateHorizontalLine(self):
@@ -183,6 +185,13 @@ class Puzzle():
             if (Count + 1) % self.__GridSize == 0:
                 print("|")
                 print(self.__CreateHorizontalLine())
+    
+    def ReplayMoves(self):
+        print("\nReplaying your moves:")
+        for move in self.__Moves: #change 2
+            position, symbol = move
+            print(f"Position: {position}, Symbol: {symbol}")
+
 
 class Pattern():
     def __init__(self, SymbolToUse, PatternString):

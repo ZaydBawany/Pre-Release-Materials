@@ -157,7 +157,9 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            Symbol = input("Enter symbol: ")
+        #changes start
+        Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
+        #changes end
         return Symbol
 
     def __CreateHorizontalLine(self):
@@ -242,15 +244,4 @@ class BlockedCell(Cell):
         return False
 
 if __name__ == "__main__":
-    Main(
-        #changes start
-        
-        # The following lines display the pattern of each symbol (Q, T, X) to the user.
-        # This helps the user visualize how each symbol's pattern looks.
-        print("Patterns:")
-        print("Q: \n QQQ \n Q  \n Q  ")
-        print("T: \n TTT \n  T \n  T ")
-        print("X: \nX   X\n  X \nX   X")
-        
-        #changes end
-)
+    Main()

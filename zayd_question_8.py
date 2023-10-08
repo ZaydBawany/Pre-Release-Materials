@@ -83,6 +83,24 @@ class Puzzle():
     def AttemptPuzzle(self):
         Finished = False
         while not Finished:
+            #changes start
+            # Check if the user chose to shuffle the grid
+            if Symbol == 'S':
+                import random
+                flat_grid = [cell for row in self.__Grid for cell in row if cell != -1]  # Flatten the grid excluding blocked cells
+                random.shuffle(flat_grid)  # Shuffle the flattened grid
+
+                # Refill the original grid with shuffled values
+                index = 0
+                for i in range(len(self.__Grid)):
+                    for j in range(len(self.__Grid[i])):
+                        if self.__Grid[i][j] != -1:
+                            self.__Grid[i][j] = flat_grid[index]
+                            index += 1
+
+                self.__Score -= 3  # Deduct 3 moves for shuffling
+                return
+            #changes end
             self.DisplayPuzzle()
             print("Current score: " + str(self.__Score))
             Row = -1
@@ -157,9 +175,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            #changes start
-            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-            #changes end
+            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X) or S to shuffle the grid: ")
         return Symbol
 
     def __CreateHorizontalLine(self):

@@ -26,6 +26,13 @@ class Puzzle():
             self.__SymbolsLeft = 0
             self.__GridSize = 0
             self.__Grid = []
+            #changes start
+            # Counting the number of blocked cells in the grid
+            # Traverse each row in the grid and count occurrences of -1 (blocked cell)
+            blocked_cells = sum([row.count(-1) for row in self.__Grid])
+            # Displaying the total number of blocked cells to the user
+            print(f'Total number of blocked cells: {blocked_cells}')
+            #changes end
             self.__AllowedPatterns = []
             self.__AllowedSymbols = []
             self.__LoadPuzzle(args[0])
@@ -242,13 +249,4 @@ class BlockedCell(Cell):
         return False
 
 if __name__ == "__main__":
-    Main(
-        #changes start
-        
-        # The following lines count the number of blocked cells on the grid and display the count to the user.
-        # Iterate over each cell in the grid and check if it's an instance of the BlockedCell class.
-        blocked_cells_count = sum([1 for row in self.__Grid for cell in row if isinstance(cell, BlockedCell)])
-        print(f"There are {blocked_cells_count} blocked cells in this puzzle.")
-        
-        #changes end
-)
+    Main()

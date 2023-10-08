@@ -157,9 +157,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            #changes start
-            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-            #changes end
+            Symbol = input("Enter symbol: ")
         return Symbol
 
     def __CreateHorizontalLine(self):
@@ -207,7 +205,25 @@ class Cell():
     def __init__(self):
         self._Symbol = ""
         self.__SymbolsNotAllowed = []
+        self.__CustomMovesSet = False  # Initialize flag for custom moves
+        # Ensure __MovesAllowed is initialized before the custom moves logic
+        if not hasattr(self, '__MovesAllowed') or self.__MovesAllowed is None: # Return whether the object has an attribute with the given name.
+#       This is done by calling getattr(obj, name) and catching AttributeError.
+            self.__MovesAllowed = 30
 
+        #changes start
+        # Prompting the user for a custom number of moves at the beginning of the game
+        try:
+            custom_moves = int(input('Enter a custom number of moves or press Enter for default: '))
+            if custom_moves > 0:
+                self.__MovesAllowed = custom_moves
+                self.__CustomMovesSet = True  # Flag to indicate if custom moves were set
+            else:
+                self.__CustomMovesSet = False  # Use default moves and scoring if input is not positive
+        except ValueError:
+            self.__MovesAllowed = 30  # Default value for moves
+            self.__CustomMovesSet = False  # Use default moves and scoring if no custom value is provided
+        #changes end
     def GetSymbol(self):
         if self.IsEmpty():
           return "-"

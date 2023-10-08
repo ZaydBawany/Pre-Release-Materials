@@ -20,6 +20,15 @@ def Main():
         Again = input("Do another puzzle? ").lower()
 
 class Puzzle():
+    # Changes made
+    def random_block_unblock(self): #change 1
+        row = random.randint(0, self.__GridSize - 1)
+        col = random.randint(0, self.__GridSize - 1)
+        if self.__Grid[row][col] == '.':
+            self.__Grid[row][col] = 'X'
+        elif self.__Grid[row][col] == 'X':
+            self.__Grid[row][col] = '.'
+    # Changes end
     def __init__(self, *args):
         if len(args) == 1:
             self.__Score = 0
@@ -84,6 +93,8 @@ class Puzzle():
         Finished = False
         while not Finished:
             self.DisplayPuzzle()
+            if random.randint(0, 10) == 5: #change 2
+                self.random_block_unblock() #change 2
             print("Current score: " + str(self.__Score))
             Row = -1
             Valid = False
@@ -157,9 +168,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            #changes start
-            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-            #changes end
+            Symbol = input("Enter symbol: ")
         return Symbol
 
     def __CreateHorizontalLine(self):
