@@ -26,15 +26,12 @@ class Puzzle():
             self.__SymbolsLeft = 0
             self.__GridSize = 0
             self.__Grid = []
-            #changes start
-            # Counting the number of blocked cells in the grid
-            # Traverse each row in the grid and count occurrences of -1 (blocked cell)
-            blocked_cells = sum([row.count(-1) for row in self.__Grid])
-            # Displaying the total number of blocked cells to the user
-            print(f'Total number of blocked cells: {blocked_cells}')
-            #changes end
             self.__AllowedPatterns = []
             self.__AllowedSymbols = []
+            # Counting the number of blocked cells in the grid
+            blocked_cells = sum([row.GetSymbol() == '@' for row in self.__Grid])
+            # Displaying the total number of blocked cells to the user
+            print(f'Total number of blocked cells: {blocked_cells}')
             self.__LoadPuzzle(args[0])
         else:
             self.__Score = 0
@@ -49,6 +46,10 @@ class Puzzle():
                 self.__Grid.append(C)
             self.__AllowedPatterns = []
             self.__AllowedSymbols = []
+            # Counting the number of blocked cells in the grid
+            blocked_cells = sum([row.GetSymbol() == '@' for row in self.__Grid])
+            # Displaying the total number of blocked cells to the user
+            print(f'Total number of blocked cells: {blocked_cells}')
             QPattern = Pattern("Q", "QQ**Q**QQ")
             self.__AllowedPatterns.append(QPattern)
             self.__AllowedSymbols.append("Q")
