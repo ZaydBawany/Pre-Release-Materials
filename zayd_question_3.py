@@ -17,6 +17,21 @@ def Main():
             MyPuzzle = Puzzle(8, int(8 * 8 * 0.6))
         Score = MyPuzzle.AttemptPuzzle()
         print("Puzzle finished. Your score was: " + str(Score))
+        #changes start
+        # Prompt the user with the option to save the current state of the puzzle to a file.
+        save_choice = input("Would you like to save the current state of the grid to a file? (y/n) ").lower()
+        if save_choice == 'y':
+            filename = input("Enter the filename to save the puzzle: ") + ".txt"
+            # Create and open the file in write mode.
+            with open(filename, 'w') as file:
+                # Iterate over the grid of the puzzle.
+                # The range is set up to move in steps of the puzzle's grid size therefore it goes through each one, one at a time.
+                for i in range(0, len(MyPuzzle._Puzzle__Grid), MyPuzzle._Puzzle__GridSize):
+                    # For each row, get the symbols from the cells and join them into a string.
+                    # Then, write this string to the file followed by a newline.
+                    file.write(''.join([cell.GetSymbol() for cell in MyPuzzle._Puzzle__Grid[i:i+MyPuzzle._Puzzle__GridSize]]) + '\\n')
+        print(f"Puzzle saved to {filename}")
+        #changes end
         Again = input("Do another puzzle? ").lower()
 
 class Puzzle():
@@ -26,14 +41,6 @@ class Puzzle():
             self.__SymbolsLeft = 0
             self.__GridSize = 0
             self.__Grid = []
-        #changes start
-        # Counting the number of blocked cells in the grid
-        # We traverse each row in the grid and count occurrences of -1 (blocked cell)
-        blocked_cells = sum([row.count(-1) for row in self.__Grid])
-        # Displaying the total number of blocked cells to the user
-        print(f'Total number of blocked cells: {blocked_cells}')
-        #changes end
-        #changes end
             self.__AllowedPatterns = []
             self.__AllowedSymbols = []
             self.__LoadPuzzle(args[0])
@@ -122,17 +129,7 @@ class Puzzle():
         print()
         self.DisplayPuzzle()
         print()
-        return self.__Score   
-    # Method to display the count of each symbol on the grid
-    def DisplaySymbolCount(self):
-        # Counting occurrences of each symbol in the grid
-        q_count = sum([row.count('Q') for row in self.__Grid])
-        t_count = sum([row.count('T') for row in self.__Grid])
-        x_count = sum([row.count('X') for row in self.__Grid])
-        # Displaying counts of each symbol to the user
-        print(f'Q: {q_count}, T: {t_count}, X: {x_count}')
-
-    
+        return self.__Score
 
     def __GetCell(self, Row, Column):
         Index = (self.__GridSize - Row) * self.__GridSize + Column - 1
