@@ -83,26 +83,18 @@ class Puzzle():
     def AttemptPuzzle(self):
         Finished = False
         while not Finished:
-            #changes start
-            # Check if the user chose to shuffle the grid
-            if Symbol == 'S':
-                import random
-                flat_grid = [cell for row in self.__Grid for cell in row if cell != -1]  # Flatten the grid excluding blocked cells
-                random.shuffle(flat_grid)  # Shuffle the flattened grid
-
-                # Refill the original grid with shuffled values
-                index = 0
-                for i in range(len(self.__Grid)):
-                    for j in range(len(self.__Grid[i])):
-                        if self.__Grid[i][j] != -1:
-                            self.__Grid[i][j] = flat_grid[index]
-                            index += 1
-
-                self.__Score -= 3  # Deduct 3 moves for shuffling
-                return
-            #changes end
             self.DisplayPuzzle()
             print("Current score: " + str(self.__Score))
+            #change 1
+            print("Current score: " + str(self.__Score))
+            hint_request = input("Do you want a hint? (y/n): ").lower()
+            if hint_request == 'y':
+                if self.__SymbolsLeft < 5:
+                    print("Not enough moves for a hint!")
+                else:
+                    self.__GiveHint()
+                    self.__SymbolsLeft -= 5
+            #end of change 1
             Row = -1
             Valid = False
             while not Valid:
@@ -128,6 +120,9 @@ class Puzzle():
                 if AmountToAddToScore > 0:
                     self.__Score += AmountToAddToScore
             if self.__SymbolsLeft == 0:
+                #change number 3
+                print("You have used all your moves!")
+                #end of change 3
                 Finished = True
         print()
         self.DisplayPuzzle()
@@ -140,6 +135,17 @@ class Puzzle():
             return self.__Grid[Index]
         else:
             raise IndexError()
+    #change 2
+    def __GiveHint(self):
+        for row in range(1, self.__GridSize + 1):
+            for col in range(1, self.__GridSize + 1):
+                cell = self.__GetCell(row, col)
+                for symbol in self.__AllowedSymbols:
+                    if cell.CheckSymbolAllowed(symbol):
+                        print(f"Hint: Place '{symbol}' at Row {row}, Column {col}.")
+                        return
+
+    #end of change 2
 
     def CheckforMatchWithPattern(self, Row, Column):
         for StartRow in range(Row + 2, Row - 1, -1):
@@ -175,7 +181,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-            Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X) or S to shuffle the grid: ")
+            Symbol = input("Enter symbol: ")
         return Symbol
 
     def __CreateHorizontalLine(self):
