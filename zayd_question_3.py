@@ -26,6 +26,14 @@ class Puzzle():
             self.__SymbolsLeft = 0
             self.__GridSize = 0
             self.__Grid = []
+        #changes start
+        # Counting the number of blocked cells in the grid
+        # We traverse each row in the grid and count occurrences of -1 (blocked cell)
+        blocked_cells = sum([row.count(-1) for row in self.__Grid])
+        # Displaying the total number of blocked cells to the user
+        print(f'Total number of blocked cells: {blocked_cells}')
+        #changes end
+        #changes end
             self.__AllowedPatterns = []
             self.__AllowedSymbols = []
             self.__LoadPuzzle(args[0])
@@ -81,21 +89,21 @@ class Puzzle():
             print("Puzzle not loaded")
 
     def AttemptPuzzle(self):
-        #changes start
-        # Calling the DisplaySymbolCount method at the start of the AttemptPuzzle method
-        # This will display the count of each symbol every time a new move is made
-        self.DisplaySymbolCount()
-        # Rest of the AttemptPuzzle method's logic...
-        #changes end
-
-    # Method to display the count of each symbol on the grid
-    def DisplaySymbolCount(self):
-        # Counting occurrences of each symbol in the grid
-        q_count = sum([row.count('Q') for row in self.__Grid])
-        t_count = sum([row.count('T') for row in self.__Grid])
-        x_count = sum([row.count('X') for row in self.__Grid])
-        # Displaying counts of each symbol to the user
-        print(f'Q: {q_count}, T: {t_count}, X: {x_count}')
+        Finished = False
+        while not Finished:
+            self.DisplayPuzzle()
+            print("Current score: " + str(self.__Score))
+            Row = -1
+            Valid = False
+            while not Valid:
+                try:
+                    Row = int(input("Enter row number: "))
+                    Valid = True
+                except:
+                    pass
+            Column = -1
+            Valid = False
+            while not Valid:
                 try:
                     Column = int(input("Enter column number: "))
                     Valid = True
@@ -114,7 +122,17 @@ class Puzzle():
         print()
         self.DisplayPuzzle()
         print()
-        return self.__Score
+        return self.__Score   
+    # Method to display the count of each symbol on the grid
+    def DisplaySymbolCount(self):
+        # Counting occurrences of each symbol in the grid
+        q_count = sum([row.count('Q') for row in self.__Grid])
+        t_count = sum([row.count('T') for row in self.__Grid])
+        x_count = sum([row.count('X') for row in self.__Grid])
+        # Displaying counts of each symbol to the user
+        print(f'Q: {q_count}, T: {t_count}, X: {x_count}')
+
+    
 
     def __GetCell(self, Row, Column):
         Index = (self.__GridSize - Row) * self.__GridSize + Column - 1
@@ -157,11 +175,7 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-        #changes start
-        #changes start
-        Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-        #changes end
-        #changes end
+            Symbol = input("Enter symbol: ")
         return Symbol
 
     def __CreateHorizontalLine(self):
