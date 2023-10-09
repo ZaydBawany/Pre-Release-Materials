@@ -157,9 +157,16 @@ class Puzzle():
     def __GetSymbolFromUser(self):
         Symbol = ""
         while not Symbol in self.__AllowedSymbols:
-        #changes start
-        Symbol = input("Enter symbol ([Q-pattern] for Q, [T-pattern] for T, [X-pattern] for X): ")
-        #changes end
+            #changes start
+            #remove this line of code Symbol = input("Enter symbol: ")
+            # Extracting patterns for each symbol
+            q_pattern = "QQ**Q**QQ"
+            t_pattern = "TTT**T**T"
+            x_pattern = "X*X*X*X*X"
+
+            # Prompting the user for symbol input, displaying the pattern next to each symbol
+            Symbol = input(f"Enter symbol to place (Q: {q_pattern}, T: {t_pattern}, X: {x_pattern}): ")
+            #changes end
         return Symbol
 
     def __CreateHorizontalLine(self):
