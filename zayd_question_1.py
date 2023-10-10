@@ -6,13 +6,6 @@
 import random
 import os
 
-
-#changes start
-
-# The following lines add a welcome message that will be displayed to the user when the game starts.
-print("Welcome to the Puzzle Game!")
-
-#changes end
 def Main():
     Again = "y"
     Score = 0
@@ -90,8 +83,13 @@ class Puzzle():
     def AttemptPuzzle(self):
         Finished = False
         while not Finished:
+            #changes start
             self.DisplayPuzzle()
             print("Current score: " + str(self.__Score))
+            
+            # Ask the user if they want to place or remove a symbol
+            action = input("Do you want to place or remove a symbol? (place/remove): ").lower()
+            
             Row = -1
             Valid = False
             while not Valid:
@@ -100,6 +98,7 @@ class Puzzle():
                     Valid = True
                 except:
                     pass
+
             Column = -1
             Valid = False
             while not Valid:
@@ -108,20 +107,31 @@ class Puzzle():
                     Valid = True
                 except:
                     pass
-            Symbol = self.__GetSymbolFromUser()
-            self.__SymbolsLeft -= 1
+
             CurrentCell = self.__GetCell(Row, Column)
-            if CurrentCell.CheckSymbolAllowed(Symbol):
-                CurrentCell.ChangeSymbolInCell(Symbol)
-                AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
-                if AmountToAddToScore > 0:
-                    self.__Score += AmountToAddToScore
+
+            # If user chooses to place a symbol
+            if action == "place":
+                Symbol = self.__GetSymbolFromUser()
+                self.__SymbolsLeft -= 1
+                if CurrentCell.CheckSymbolAllowed(Symbol):
+                    CurrentCell.ChangeSymbolInCell(Symbol)
+                    AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
+                    if AmountToAddToScore > 0:
+                        self.__Score += AmountToAddToScore
+
+            # If user chooses to remove a symbol
+            elif action == "remove":
+                if not CurrentCell.IsEmpty():
+                    # Remove the symbol from the cell
+                    CurrentCell.ChangeSymbolInCell("")
+                    # Increment the symbols left as one symbol was removed
+                    self.__SymbolsLeft += 1
+
             if self.__SymbolsLeft == 0:
                 Finished = True
-        print()
-        self.DisplayPuzzle()
-        print()
         return self.__Score
+    #changes end
 
     def __GetCell(self, Row, Column):
         Index = (self.__GridSize - Row) * self.__GridSize + Column - 1

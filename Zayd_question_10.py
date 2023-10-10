@@ -17,9 +17,6 @@ def Main():
             MyPuzzle = Puzzle(8, int(8 * 8 * 0.6))
         Score = MyPuzzle.AttemptPuzzle()
         print("Puzzle finished. Your score was: " + str(Score))
-        replay = input("Do you want to replay your moves? (y/n): ").lower()
-        if replay == "y":
-            MyPuzzle.ReplayMoves() #change 3
         Again = input("Do another puzzle? ").lower()
 
 class Puzzle():
@@ -54,7 +51,6 @@ class Puzzle():
             TPattern = Pattern("T", "TTT**T**T")
             self.__AllowedPatterns.append(TPattern)
             self.__AllowedSymbols.append("T")
-            self.__Moves = [] #change 1
 
     def __LoadPuzzle(self, Filename):
         try:
@@ -113,7 +109,20 @@ class Puzzle():
                 AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
                 if AmountToAddToScore > 0:
                     self.__Score += AmountToAddToScore
+            #changes start
+            # Randomly decide to block or unblock a cell
+            if random.choice([True, False]):
+                random_cell_index = random.randint(0, len(self.__Grid) - 1)
+                random_cell = self.__Grid[random_cell_index]
+                if isinstance(random_cell, Cell) and not isinstance(random_cell, BlockedCell):
+                    # Replace the cell with a blocked cell
+                    self.__Grid[random_cell_index] = BlockedCell()
+                elif isinstance(random_cell, BlockedCell):
+                    # Replace the blocked cell with a regular cell
+                    self.__Grid[random_cell_index] = Cell()
+            #changes end
             if self.__SymbolsLeft == 0:
+    
                 Finished = True
         print()
         self.DisplayPuzzle()
@@ -185,13 +194,6 @@ class Puzzle():
             if (Count + 1) % self.__GridSize == 0:
                 print("|")
                 print(self.__CreateHorizontalLine())
-    
-    def ReplayMoves(self):
-        print("\nReplaying your moves:")
-        for move in self.__Moves: #change 2
-            position, symbol = move
-            print(f"Position: {position}, Symbol: {symbol}")
-
 
 class Pattern():
     def __init__(self, SymbolToUse, PatternString):
