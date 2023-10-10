@@ -81,10 +81,18 @@ class Puzzle():
             print("Puzzle not loaded")
 
     def AttemptPuzzle(self):
+        # Start the puzzle game
         Finished = False
+        puzzle_states = []  # List to store the puzzle states after each move
         while not Finished:
-            self.DisplayPuzzle()
+            self.DisplayPuzzle()  # Display the current state of the puzzle
             print("Current score: " + str(self.__Score))
+            
+            # Capture the current state of the puzzle before making a move
+            current_state = [cell.GetSymbol() for cell in self.__Grid]
+            puzzle_states.append(current_state)
+            
+            # Get the row number from the user
             Row = -1
             Valid = False
             while not Valid:
@@ -93,6 +101,8 @@ class Puzzle():
                     Valid = True
                 except:
                     pass
+            
+            # Get the column number from the user
             Column = -1
             Valid = False
             while not Valid:
@@ -101,20 +111,36 @@ class Puzzle():
                     Valid = True
                 except:
                     pass
+            
+            # Get the symbol from the user
             Symbol = self.__GetSymbolFromUser()
-            self.__SymbolsLeft -= 1
+            self.__SymbolsLeft -= 1  # Decrement symbols left counter
+            
+            # Check if the symbol is allowed in the selected cell and update accordingly
             CurrentCell = self.__GetCell(Row, Column)
             if CurrentCell.CheckSymbolAllowed(Symbol):
                 CurrentCell.ChangeSymbolInCell(Symbol)
                 AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
                 if AmountToAddToScore > 0:
-                    self.__Score += AmountToAddToScore
+                    self.__Score += AmountToAddToScore  # Update the score if there's a match
+            
+            # Display the puzzle after the move to show the updated state
+            self.DisplayPuzzle()
+            
+            # Ask the user if they want to undo the last move
+            undo_choice = input("Do you want to undo your last move? (y/n): ")
+            if undo_choice.lower() == "y" and puzzle_states:
+                previous_state = puzzle_states.pop()  # Get the previous state of the puzzle
+                for i, cell in enumerate(self.__Grid):
+                    cell.ChangeSymbolInCell(previous_state[i])  # Revert each cell to its previous state
+                self.__SymbolsLeft += 1  # Increment symbols left counter
+            
+            # Check if there are no symbols left to place; if so, end the game
             if self.__SymbolsLeft == 0:
                 Finished = True
-        print()
-        self.DisplayPuzzle()
-        print()
-        return self.__Score
+                
+        return self.__Score  # Return the final score after the game ends
+    #changes end here
 
     def __GetCell(self, Row, Column):
         Index = (self.__GridSize - Row) * self.__GridSize + Column - 1
@@ -205,25 +231,7 @@ class Cell():
     def __init__(self):
         self._Symbol = ""
         self.__SymbolsNotAllowed = []
-        self.__CustomMovesSet = False  # Initialize flag for custom moves
-        # Ensure __MovesAllowed is initialized before the custom moves logic
-        if not hasattr(self, '__MovesAllowed') or self.__MovesAllowed is None: # Return whether the object has an attribute with the given name.
-#       This is done by calling getattr(obj, name) and catching AttributeError.
-            self.__MovesAllowed = 30
 
-        #changes start
-        # Prompting the user for a custom number of moves at the beginning of the game
-        try:
-            custom_moves = int(input('Enter a custom number of moves or press Enter for default: '))
-            if custom_moves > 0:
-                self.__MovesAllowed = custom_moves
-                self.__CustomMovesSet = True  # Flag to indicate if custom moves were set
-            else:
-                self.__CustomMovesSet = False  # Use default moves and scoring if input is not positive
-        except ValueError:
-            self.__MovesAllowed = 30  # Default value for moves
-            self.__CustomMovesSet = False  # Use default moves and scoring if no custom value is provided
-        #changes end
     def GetSymbol(self):
         if self.IsEmpty():
           return "-"
